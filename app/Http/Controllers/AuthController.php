@@ -24,6 +24,7 @@ class AuthController extends Controller
         ]);
         // dd($request->all());
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            dd($request->roles);
             return redirect('employe')->with('success', 'You are logged in!');
         }
     
