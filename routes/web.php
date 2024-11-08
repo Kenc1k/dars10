@@ -8,6 +8,8 @@ use App\Http\Controllers\UniversityController;
 use App\Http\Controllers;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Middleware\Auth as MiddlewareAuth;
+use App\Models\Employe;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,7 +23,12 @@ Route::resource('university' , UniversityController::class);
 
 Route::resource('faculty', FacultyController::class);
 
-Route::resource('employe', EmployeController::class);
+Route::get('/employe' , [EmployeController::class , 'index']);
+Route::delete('/employe/{employe}' , [EmployeController::class , 'destroy'])->name('employe.destroy')->middleware(MiddlewareAuth::class. ':deleter,admin');
+Route::get('/employe/create' , [EmployeController::class , 'create'])->name('employe.create')->middleware(MiddlewareAuth::class. ':creater, admin');
+Route::post('/employe' , [EmployeController::class , 'store'])->name('employe.store');
+Route::get('/employe/{id}/edit' , [EmployeController::class , 'edit'])->name('employe.edit')->middleware(MiddlewareAuth::class. ':updater,admin');
+Route::put('/employe/{id}' , [EmployeController::class , 'update'])->name('employe.update');
 
 Route::get('loginPage' , [AuthController::class, 'loginPage']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
